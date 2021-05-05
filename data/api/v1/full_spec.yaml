@@ -12205,23 +12205,31 @@ components:
       - value
       - palette
       type: object
-    WidgetCustomLink:
-      description: Custom links help you connect a data value to a URL, like a Datadog
-        page or your AWS console.
+    WidgetContextMenuLink:
+      description: Context menu link helps you configure context menu links on a graph.
       properties:
-        label:
-          description: The label for the custom link URL. Keep the label short and
-            descriptive. Use metrics and tags as variables.
-          example: Search logs for {{host}}
-          type: string
+        is_hidden:
+          description: The flag for toggling context menu link visibility.
+          type: boolean
         link:
           description: The URL of the custom link. URL must include `http` or `https`.
             A relative URL must start with `/`.
           example: https://app.datadoghq.com/logs?query={{host}}
           type: string
+        override_label:
+          description: The label ID that refers to a context menu link.
+          example: Can be `logs`, `hosts`, `traces`, `profiles`, `processes`, `containers`,
+            or `rum`
+          type: string
       required:
-      - label
-      - link
+      - override_label
+      type: object
+    WidgetCustomLink:
+      description: Custom links help you connect a data value to a URL, like a Datadog
+        page or your AWS console.
+      oneOf:
+      - $ref: '#/components/schemas/WidgetUserDefinedLink'
+      - $ref: '#/components/schemas/WidgetContextMenuLink'
       type: object
     WidgetDefinition:
       description: '[Definition of the widget](https://docs.datadoghq.com/dashboards/widgets/).'
@@ -12756,6 +12764,24 @@ components:
       - MONTH_TO_DATE
       - PREVIOUS_MONTH
       - GLOBAL_TIME
+    WidgetUserDefinedLink:
+      description: Custom links help you connect a data value to a URL, like a Datadog
+        page or your AWS console.
+      properties:
+        label:
+          description: The label for the custom link URL. Keep the label short and
+            descriptive. Use metrics and tags as variables.
+          example: Search logs for {{host}}
+          type: string
+        link:
+          description: The URL of the custom link. URL must include `http` or `https`.
+            A relative URL must start with `/`.
+          example: https://app.datadoghq.com/logs?query={{host}}
+          type: string
+      required:
+      - label
+      - link
+      type: object
     WidgetVerticalAlign:
       description: Vertical alignment.
       enum:
